@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createUser } from '../../services/userAPI';
+import LoadingMessage from '../../components/LoadingMessage';
 
 function Login() {
   const [name, setName] = useState('');
@@ -53,7 +54,7 @@ function Login() {
         >
           Entrar
         </button>
-        {loading && <p>Carregando...</p>}
+        {loading && <LoadingMessage />}
       </form>
     </div>
   );

@@ -1,5 +1,5 @@
 import './style.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import searchAlbumsAPI from '../../services/searchAlbumsAPI';
 import LoadingMessage from '../../components/LoadingMessage';
@@ -45,6 +45,8 @@ function Search() {
     }
   };
 
+  // ... (código anterior)
+
   return (
     <div>
       <h1 className={ hidden }>Pesquise a sua Banda</h1>
@@ -68,7 +70,7 @@ function Search() {
         </button>
         {loading && <LoadingMessage />}
       </form>
-      {albums.length > 0 ? (
+      {albums.length > 0 && (
         <div>
           <p>
             Resultado de álbuns de:
@@ -88,9 +90,10 @@ function Search() {
             ))}
           </ul>
         </div>
-      ) : noAlbumsFound ? (
-        <p>Nenhum álbum foi encontrado</p>
-      ) : null}
+      )}
+      {albums.length === 0 && noAlbumsFound && (
+        <p data-testid="no-albums-message">Nenhum álbum foi encontrado</p>
+      )}
     </div>
   );
 }

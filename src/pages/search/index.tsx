@@ -7,7 +7,7 @@ import LoadingMessage from '../../components/LoadingMessage';
 function Search() {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [hidden, setHidden] = useState('');
+  const [ocult, setHidden] = useState('');
   const [albums, setAlbums] = useState([]);
   const [artist, setArtist] = useState('');
   const [noAlbumsFound, setNoAlbumsFound] = useState(false);
@@ -26,7 +26,7 @@ function Search() {
     if (name.length >= 2) {
       handleSearchButtonClick();
       setLoading(true);
-      setHidden('hidden');
+      setHidden('ocult');
       setNoAlbumsFound(false); // Reset the noAlbumsFound state
 
       try {
@@ -45,22 +45,20 @@ function Search() {
     }
   };
 
-  // ... (código anterior)
-
   return (
     <div>
-      <h1 className={ hidden }>Pesquise a sua Banda</h1>
+      <h1 className={ ocult }>Pesquise a sua Banda</h1>
       <form>
         <input
           placeholder="Nome do Artista"
-          className={ hidden }
+          className={ ocult }
           type="text"
           value={ name }
           onChange={ handleNameChange }
           data-testid="search-artist-input"
         />
         <button
-          className={ hidden }
+          className={ ocult }
           type="button"
           onClick={ handleSearchChange }
           disabled={ name.length < 2 || loading }

@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import getMusics from '../../services/musicsAPI'; // Certifique-se de importar o tipo correto para a música
+import getMusics from '../../services/musicsAPI';
 import LoadingMessage from '../../components/LoadingMessage';
 import MusicCard from '../../components/MusicCard/MusicCard';
 import { AlbumType, SongType } from '../../types';
 
 export default function Album() {
-  const { id } = useParams<{ id: string }>(); // Defina o tipo para o parâmetro "id"
+  const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [track, settrack] = useState<SongType[]>([]);
   const [showInfo, setShowInfo] = useState<AlbumType>({
@@ -20,7 +20,7 @@ export default function Album() {
     trackCount: 0,
   });
 
-  async function fetch() {
+  async function fetchAlbumData() {
     if (id) {
       const data = await getMusics(id);
       const [album, ...musics] = data;
@@ -31,32 +31,30 @@ export default function Album() {
   }
 
   useEffect(() => {
-    fetch();
-  }, []);
+    fetchAlbumData();
+  }, [fetchAlbumData]); // Incluir fetchAlbumData no array de dependências
 
   if (loading) return <LoadingMessage />;
 
   return (
     <>
       <h1>Página do álbum</h1>
-
-      {loading && <LoadingMessage />}
       <p data-testid="album-name">
-        { showInfo.collectionName}
+        {showInfo.collectionName}
         {' '}
       </p>
-
       <p data-testid="artist-name">
-        { showInfo.artistName }
+        {showInfo.artistName}
         {' '}
       </p>
-      {track && track.map((music) => (
+      {track.map((music) => (
         <MusicCard
           key={ music.trackId }
           trackId={ music.trackId }
           trackName={ music.trackName }
           previewUrl={ music.previewUrl }
-        />))}
+        />
+      ))}
     </>
   );
 }

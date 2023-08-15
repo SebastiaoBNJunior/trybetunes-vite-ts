@@ -1,7 +1,5 @@
-import React from 'react';
-
 function LoadingMessage() {
-  return (<p>Carregando...</p>);
+  return (<h3>Carregando...</h3>);
 }
 
 export default LoadingMessage;

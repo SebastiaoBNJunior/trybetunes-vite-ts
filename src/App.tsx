@@ -3,10 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
 import Album from './pages/album';
 import Favorites from './pages/favorites';
-import Edit from './pages/profile/edit';
 import Profile from './pages/profile';
 import Search from './pages/search';
-import Header from './components/Header';
 import Layout from './components/Layout';
 
 function App() {

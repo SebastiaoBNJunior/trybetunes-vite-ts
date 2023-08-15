@@ -1,13 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import getMusics, { Music } from '../../services/musicsAPI'; // Certifique-se de importar o tipo correto para a música
+import getMusics from '../../services/musicsAPI'; // Certifique-se de importar o tipo correto para a música
 import LoadingMessage from '../../components/LoadingMessage';
-import MusicCard from '../../components/MusicCard';
+import MusicCard from '../../components/MusicCard/MusicCard';
 import { AlbumType, SongType } from '../../types';
 
 export default function Album() {
   const { id } = useParams<{ id: string }>(); // Defina o tipo para o parâmetro "id"
-  const [getAlbum, setGetAlbum] = useState<Music[]>([]); // Defina o tipo para o estado "getAlbum"
   const [loading, setLoading] = useState(true);
   const [track, settrack] = useState<SongType[]>([]);
   const [showInfo, setShowInfo] = useState<AlbumType>({

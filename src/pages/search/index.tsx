@@ -1,5 +1,5 @@
 import './style.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import searchAlbumsAPI from '../../services/searchAlbumsAPI';
 import LoadingMessage from '../../components/LoadingMessage';
@@ -8,11 +8,11 @@ function Search() {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [ocult, setHidden] = useState('');
-  const [albums, setAlbums] = useState([]);
-  const [artist, setArtist] = useState('');
-  const [noAlbumsFound, setNoAlbumsFound] = useState(false);
+  const [albums, setAlbums] = useState<Array<any>>([]); // Define o tipo correto para o estado albums
+  const [artist, setArtist] = useState<string>(''); // Define o tipo correto para o estado artist
+  const [noAlbumsFound, setNoAlbumsFound] = useState<boolean>(false); // Define o tipo correto para o estado noAlbumsFound
 
-  const handleNameChange = (event) => {
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;
     setName(newName);
     setArtist(newName);
@@ -27,12 +27,12 @@ function Search() {
       handleSearchButtonClick();
       setLoading(true);
       setHidden('ocult');
-      setNoAlbumsFound(false); // Reset the noAlbumsFound state
+      setNoAlbumsFound(false);
 
       try {
         const response = await searchAlbumsAPI(name);
         if (response.length === 0) {
-          setNoAlbumsFound(true); // Set noAlbumsFound state if no albums were found
+          setNoAlbumsFound(true);
         } else {
           setAlbums(response);
         }

@@ -1,0 +1,7 @@
+.favoriteHeart {
+    visibility: hidden;
+}
+
+.favoriteHeartRed {
+    cursor: pointer;
+}

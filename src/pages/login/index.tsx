@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { createUser } from '../../services/userAPI';
 import LoadingMessage from '../../components/LoadingMessage';
 
 function Login() {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState(false); // Estado para controlar o redirecionamento
+  const [saved, setSaved] = useState(false);
+  const navigate = useNavigate();
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;
@@ -18,20 +20,15 @@ function Login() {
 
       try {
         await createUser({ name });
+        setSaved(true);
+        navigate('/search');
         setLoading(false);
-        setSaved(true); // Ativar redirecionamento
       } catch (error) {
         console.error('Erro ao logar usuário', error);
         setLoading(false);
       }
     }
   };
-
-  useEffect(() => {
-    if (saved) {
-      window.location.href = '/search'; // Redirecionar após o salvamento
-    }
-  }, [saved]);
 
   return (
     <div>
@@ -56,6 +53,7 @@ function Login() {
         </button>
         {loading && <LoadingMessage />}
       </form>
+      {saved && <Navigate to="/search" />}
     </div>
   );
 }

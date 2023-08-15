@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import getMusics from '../../services/musicsAPI';
 import LoadingMessage from '../../components/LoadingMessage';
 import MusicCard from '../../components/MusicCard/MusicCard';
@@ -8,7 +8,7 @@ import { AlbumType, SongType } from '../../types';
 export default function Album() {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
-  const [track, settrack] = useState<SongType[]>([]);
+  const [track, setTrack] = useState<SongType[]>([]);
   const [showInfo, setShowInfo] = useState<AlbumType>({
     artistId: 0,
     artistName: '',
@@ -20,19 +20,19 @@ export default function Album() {
     trackCount: 0,
   });
 
-  async function fetchAlbumData() {
+  const fetchAlbumData = useCallback(async () => {
     if (id) {
       const data = await getMusics(id);
       const [album, ...musics] = data;
       setShowInfo(album);
-      settrack(musics);
+      setTrack(musics);
       setLoading(false);
     }
-  }
+  }, [id]);
 
   useEffect(() => {
     fetchAlbumData();
-  }, [fetchAlbumData]); // Incluir fetchAlbumData no array de dependências
+  }, [fetchAlbumData]);
 
   if (loading) return <LoadingMessage />;
 

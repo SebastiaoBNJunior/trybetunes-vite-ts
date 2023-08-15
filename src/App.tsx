@@ -12,7 +12,7 @@ import Layout from './components/Layout';
 function App() {
   return (
     <>
-      <h1>Project Trybetunes</h1>
+      <h1>Project Trybetunes!</h1>
       <Routes>
         <Route path="/" Component={ Login } />
         <Route path="/search" Component={ Layout }>

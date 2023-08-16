@@ -1,58 +1,65 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SongType } from '../../types';
-import { addSong, removeSong } from '../../services/favoriteSongsAPI';
+import { addSong, removeSong, getFavoriteSongs } from '../../services/favoriteSongsAPI';
 import './style.css';
 import emptyHeart from '../../images/empty_heart.png';
 import checkHeart from '../../images/checked_heart.png';
+import LoadingMessage from '../LoadingMessage';
 
 export default function MusicCard(musics: SongType) {
   const { trackId, trackName, previewUrl } = musics;
-  const [checked, setChecked] = useState(false);
-  const [favoriteMusic, setFavoriteMusic] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [favoriteSongs, setFavoriteSongs] = useState<SongType[]>([]);
 
-  async function isFavoriteMusic(prop: boolean) {
-    setFavoriteMusic(prop);
-    if (!favoriteMusic) {
+  useEffect(() => {
+    const fetchFavoriteSongs = async () => {
+      const songs = await getFavoriteSongs();
+      setFavoriteSongs(songs);
+      setLoading(false);
+    };
+
+    fetchFavoriteSongs();
+  }, []);
+
+  const toggleFavorite = async () => {
+    setIsFavorite(!isFavorite);
+
+    if (isFavorite) {
+      await removeSong({ trackId, trackName, previewUrl });
+    } else {
       await addSong({ trackId, trackName, previewUrl });
     }
-  }
 
-  async function notFavoriteMusic(prop: boolean) {
-    setFavoriteMusic(prop);
-    if (favoriteMusic) {
-      await removeSong({ trackId, trackName, previewUrl });
-    }
-  }
-
-  function changeHeartColor() {
-    if (!checked) {
-      setChecked(true);
-      isFavoriteMusic(true);
-    } else {
-      setChecked(false);
-      notFavoriteMusic(false);
-    }
-  }
+    const updatedFavoriteSongs = await getFavoriteSongs();
+    setFavoriteSongs(updatedFavoriteSongs);
+  };
 
   return (
-    <div key={ trackId }>
+    <div>
+      {/* Exibe o nome da música */}
       <p>{trackName}</p>
-      <audio data-testid="audio-component" src="{previewUrl}" controls>
+      {/* Player de áudio que reproduz a prévia da música */}
+      <audio data-testid="audio-component" src={ previewUrl } controls>
         <track kind="captions" />
         O seu navegador não suporta o elemento
-        {' '}
         {' '}
         <code>audio</code>
         .
       </audio>
+      {/* Exibe a mensagem de carregamento enquanto a requisição estiver em andamento */}
+      {loading ? <LoadingMessage /> : null}
+      {/* Input do tipo checkbox para marcar como favorito */}
       <label data-testid={ `checkbox-music-${trackId}` }>
-        {checked ? <img src={ checkHeart } alt="favorite" />
-          : <img src={ emptyHeart } alt="favorite" />}
         <input
           type="checkbox"
-          onChange={ changeHeartColor }
-          checked={ checked }
-          style={ { appearance: 'none' } }
+          checked={ isFavorite || favoriteSongs.some((song) => song.trackId === trackId) }
+          onChange={ toggleFavorite }
+        />
+        {/* Exibe a imagem do coração preenchido ou vazio de acordo com o status de favorito */}
+        <img
+          src={ isFavorite ? checkHeart : emptyHeart }
+          alt="favorite"
         />
       </label>
     </div>

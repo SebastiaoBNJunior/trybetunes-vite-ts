@@ -1,7 +1,14 @@
-.favoriteHeart {
+/* .favoriteHeart {
   visibility: hidden;
 }
 
 .favoriteHeartRed {
   cursor: pointer;
+} */
+.checkbox {
+  width: 0;
+}
+
+.container-player {
+  display: flex;
 }

@@ -7,10 +7,7 @@ import checkHeart from '../../images/checked_heart.png';
 
 export default function MusicCard(musics: SongType) {
   const { trackId, trackName, previewUrl } = musics;
-  // const emptyHeart = '/src/images/empty_heart.png';
-  // const checkHeart = '/src/images/checked_heart.png';
   const [checked, setChecked] = useState(false);
-  const [hearthred, setHeartRed] = useState(emptyHeart);
   const [favoriteMusic, setFavoriteMusic] = useState(false);
 
   async function isFavoriteMusic(prop: boolean) {
@@ -49,8 +46,14 @@ export default function MusicCard(musics: SongType) {
         .
       </audio>
       <label data-testid={ `checkbox-music-${trackId}` }>
-        <input className="favoriteHeart" onClick={ changeHeartColor } type="checkbox" />
-        <img className="favoriteHeartRed" src={ hearthred } alt="favorite" />
+        {checked ? <img src={ checkHeart } alt="favorite" />
+          : <img src={ emptyHeart } alt="favorite" />}
+        <input
+          type="checkbox"
+          onChange={ changeHeartColor }
+          checked={ checked }
+          style={ { appearance: 'none' } }
+        />
       </label>
     </div>
   );

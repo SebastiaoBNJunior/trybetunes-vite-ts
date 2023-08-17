@@ -6,6 +6,7 @@ import Favorites from './pages/favorites';
 import Profile from './pages/profile';
 import Search from './pages/search';
 import Layout from './components/Layout';
+import ProfileEdit from './pages/profile/edit/index';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/profile" Component={ Layout }>
           <Route index Component={ Profile } />
         </Route>
+        <Route path="/profile/edit" Component={ ProfileEdit } />
       </Routes>
     </>
   );

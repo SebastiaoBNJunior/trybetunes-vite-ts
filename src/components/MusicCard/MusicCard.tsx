@@ -10,29 +10,27 @@ export default function MusicCard(musics: SongType) {
   const { trackId, trackName, previewUrl } = musics;
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [favoriteSongs, setFavoriteSongs] = useState<SongType[]>([]);
 
   useEffect(() => {
     const fetchFavoriteSongs = async () => {
-      const songs = await getFavoriteSongs();
-      setFavoriteSongs(songs);
+      const favoriteSongs = await getFavoriteSongs();
+      setIsFavorite(favoriteSongs.some((sng) => sng.trackId === trackId));
       setLoading(false);
     };
 
     fetchFavoriteSongs();
-  }, []);
+  }, [trackId]);
 
   const toggleFavorite = async () => {
-    setIsFavorite(!isFavorite);
-
     if (isFavorite) {
       await removeSong({ trackId, trackName, previewUrl });
+      console.log('Removed song from favorites');
     } else {
       await addSong({ trackId, trackName, previewUrl });
+      console.log('Added song to favorites');
     }
 
-    const updatedFavoriteSongs = await getFavoriteSongs();
-    setFavoriteSongs(updatedFavoriteSongs);
+    setIsFavorite(!isFavorite); // Toggle the favorite status
   };
 
   return (
@@ -53,7 +51,7 @@ export default function MusicCard(musics: SongType) {
       <label data-testid={ `checkbox-music-${trackId}` }>
         <input
           type="checkbox"
-          checked={ isFavorite || favoriteSongs.some((song) => song.trackId === trackId) }
+          checked={ isFavorite }
           onChange={ toggleFavorite }
         />
         {/* Exibe a imagem do coração preenchido ou vazio de acordo com o status de favorito */}
